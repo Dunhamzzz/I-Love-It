@@ -3,8 +3,8 @@
 define('ROOT_URL', 'http://ilo.ve.it/');
 
 // Admin Username And Password:
-$adminuser ='Dunhamzzz';
-$adminpass ='happy18town';
+$adminuser ='admin';
+$adminpass ='admin';
 
 // Random string function, edit as you wish:
 function generateTag($url) {
@@ -12,6 +12,6 @@ function generateTag($url) {
 }
 
 // DB Connection
-$db = new Mysqli('localhost', 'iloveit', 'jGcLE5cwRZm3eCw4', 'iloveit');
+$db = new Mysqli('localhost', 'username', 'password', 'iloveit');
 if ($db->connect_error)
     die('Connect Error ('.$db->connect_errno.') '. $db->connect_error);
