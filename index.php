@@ -4,18 +4,22 @@
  * 
  * @author Matthew Dunham <me@dunhamzzz.com>
  */
+error_reporting(-1);
+ini_set('display_errors','on');
+ini_set('xdebug.var_display_max_depth', 10);
 require_once('config.php');
-if (isset($_POST['s']) && !empty($_POST['u'])) {
+if (isset($_POST['submit']) && !empty($_POST['url'])) {
+    
     $errors = '';
-    if (filter_var($_POST['u'], FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED)) {
-        if (empty($_POST['t'])) {
-            $tag = generateTag($_POST['t']);
+    if (filter_var($_POST['url'], FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED)) {
+        if (empty($_POST['tag'])) {
+            $tag = generateTag($_POST['tag']);
         } else {
             // Check tag is valid
             if (preg_match('/^[a-zA-Z0-9]+$/', $_POST['t'])) {
                 // Check if tag exists
                 $stmt = $db->prepare("SELECT `id` FROM `urls` WHERE `tag` = ?");
-                $stmt->bind_param("s", $_POST['t']);
+                $stmt->bind_param("s", $_POST['tag']);
                 $stmt->execute();
                 $stmt->bind_result($id);
                 $stmt->fetch();
@@ -32,9 +36,10 @@ if (isset($_POST['s']) && !empty($_POST['u'])) {
         // Insert it.
         if (empty($errors)) {
             $stmt = $db->prepare("INSERT INTO `urls` (`ip`, `url`, `tag`, `created`) VALUES (?, ?, ?, NOW())");
-            $stmt->bind_param("sss", $_SERVER['REMOTE_ADDR'], $_POST['u'], $tag);
+            $stmt->bind_param("sss", $_SERVER['REMOTE_ADDR'], $_POST['url'], $tag);
             $stmt->execute();
             header("Location: index.php?success=true&tag=" . $tag);
+            exit();
         }
     } else {
         $errors = 'Invalid URL, include http://';
@@ -71,15 +76,15 @@ if (isset($_POST['s']) && !empty($_POST['u'])) {
             <?php else: ?>
                 <?php if (isset($_GET['success']) && isset($_GET['tag'])): ?>
                     <p><b>Your URL has been shortened!</b></p>
-                    <p>Here is your short URL: <a href="<?php echo ROOT_URL . htmlspecialchars($tag); ?>"
-                                                  target="_blank" rel="nofollow"><?php echo ROOT_URL . $tag; ?></a></p>
+                    <p>Here is your short URL: <a href="<?php echo ROOT_URL . htmlspecialchars($_GET['tag']); ?>"
+                                                  target="_blank" rel="nofollow"><?php echo ROOT_URL . $_GET['tag']; ?></a></p>
                     <?php else: ?>
                     <p>Share a link and let them know you love it!</p>
                 <?php endif; ?>
             <?php endif; ?>
             <b id="l">Long URL</b><br />
-            <input id="u" name="u" type="text" placeholder="http://" value="<?php echo isset($_POST['u']) ? htmlspecialchars($_POST['u']) : ''; ?>"/>
-            <input id="s" type="submit" name="submit" value="Shorten" /><br />
+            <input id="url" name="url" type="text" placeholder="http://" value="<?php echo isset($_POST['url']) ? htmlspecialchars($_POST['url']) : ''; ?>"/>
+            <input id="submit" type="submit" name="submit" value="Shorten" /><br />
             <i>Tag<input id="tag" name="tag" type="text" />(optional)</i>
         </form>
         <p id="f">Copyright &copy; 2011</p>
