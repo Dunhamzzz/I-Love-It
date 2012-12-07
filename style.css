@@ -1,0 +1,61 @@
+body {
+    font-family: Arial;
+    margin: 0;
+}
+
+form, h1 {
+    width: 620px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+input {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    margin: 10px;
+    padding: 5px;
+    font-size: 23px;
+}
+
+p {
+    margin: 0 0 10px;
+}
+
+a {
+    font-family: monospace;
+}
+
+#header {
+    background: #2D334D;
+}
+
+.heart,#error {
+    color: #CD0D00;
+}
+
+#submit {
+    background: #CD0D00;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 0;
+}
+
+#u {
+    width: 450px;
+}
+
+#tag {
+    font-size: 14px;
+}
+
+#f {
+    color: #999;
+    text-align: center;
+    font-size: 12px;
+}
